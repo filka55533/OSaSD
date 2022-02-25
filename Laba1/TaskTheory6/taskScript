@@ -1,0 +1,14 @@
+#!/bin/bash
+
+outError(){
+	echo "Error: $@" >&2
+}
+
+temp=
+if [ $# -ne 3 ]; then
+	outError  "Incorrect count arguments. Total count is $#"
+elif [ -d $2 ]; then
+	ls -X $2/*.$3 > $1
+else
+	outError "Incorrect directory"
+fi

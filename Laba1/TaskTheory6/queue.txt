@@ -1,0 +1,5 @@
+/home/ivan/OSaSP_051003/Laba1/TaskTheory6/abc.txt
+/home/ivan/OSaSP_051003/Laba1/TaskTheory6/answer.txt
+/home/ivan/OSaSP_051003/Laba1/TaskTheory6/ask.txt
+/home/ivan/OSaSP_051003/Laba1/TaskTheory6/queue.txt
+/home/ivan/OSaSP_051003/Laba1/TaskTheory6/task.txt

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]
+then
+	echo "Error: Incorrect variables count" >&2
+elif [[ -d $1 ]]&&[[ -d $2 ]]
+then
+for i in $1/*
+do
+	for j in $2/*
+	do
+		if [[ -f $i ]]&&[[ -f $j ]];then
+		cmp -s $i $j && echo "$i == $j"
+		fi
+	done
+done
+echo "Files was view: $(( `find $1 -maxdepth 1 | wc -l`+`find $2 -maxdepth 1 | wc -l` - `find $1 -maxdepth 1 -type d | wc -l` - `find $2 -maxdepth 1 -type d | wc -l ` ))"
+fi
+
