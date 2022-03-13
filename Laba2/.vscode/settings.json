@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "cstdio": "c",
+        "fcntl.h": "c",
+        "stdio.h": "c",
+        "types.h": "c",
+        "unistd.h": "c",
+        "errno.h": "c",
+        "string.h": "c",
+        "math.h": "c",
+        "typesandsort.h": "c"
+    }
+}
