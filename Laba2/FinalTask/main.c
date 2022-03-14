@@ -153,12 +153,14 @@ int main(int argc, char** argv)
 
     checkFileNames(head);   
     sortList(&head, compFunc);
-    
     while (head != NULL){
         char* prevPath = formDirectoryName(head->info.path, head->info.name); 
 
         head->info.name = formFileName(head->info.name, head->info.ind);
         printf("\n%s", head->info.name);             
+        if (compFunc == compareSize)
+            printf(": %d", head->info.size);
+        
         char* futPath = formDirectoryName(argv[3], head->info.name);
         symlink(prevPath, futPath);
         
