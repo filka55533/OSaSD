@@ -72,6 +72,6 @@ void sortList(TFILE_INFO_NODE** head, int (*isP1GreaterP2) (TFILE_INFO_NODE*, TF
 void freeNode(TFILE_INFO_NODE* node)
 {
     free(node->info.name );
-    // free(node->info.path );
+    free(node->info.path );
     free(node);
 }
