@@ -1,30 +1,55 @@
 #include "stdio.h"
+#include "string.h"
 #include "sys/types.h"
 #include "sys/stat.h"
 #include "fcntl.h"
+#include "limits.h"
+#include "errno.h"
 #define ERROR_CODE -1
 
 //Should return non-negative number for success
 int strToPositiveInt(char* str)
 {
-    int res = 0;
-    for (int i = 0; str[i]; i++)
-        if (str[i] >= '0' && str[i] <= '9')
-            res = res * 10 + str[i] - '0';
-        else return ERROR_CODE;
+    char* endPnt;
+    int res = strtol(str, &endPnt, 10);
+
+    if (errno)
+        if (res == LONG_MAX || errno == ERANGE){
+            fputs("Error! Overflow\n", stderr);
+            res = ERROR_CODE;
+        }else if (res == LONG_MIN || errno == ERANGE){
+            fputs("Error! Underflow\n", stderr);
+            res = ERROR_CODE; 
+        }
+        else {
+            fputs("Error! Incorrect value\n", stderr);
+            res = ERROR_CODE;
+        }
+    else{
+        
+        if (res < 0){
+            fputs("Error! Number is negative\n", stderr);
+            res = ERROR_CODE;
+        }else        
+        if (endPnt - str - strlen(str) || !strlen(str)){
+            fputs("Error! Incorrect value\n", stderr);
+            res = ERROR_CODE;
+        }
+    }
     return res;
 }
 
 //If error -- return -1
 int outputLinesFromFile(FILE* f, int countLines)
 {
-    int lines = 0;    
+    int lines = 1;    
     while (!feof(f) && (lines <= countLines || !countLines)){
         int smb = fgetc(f);
         if (smb == EOF){
             fputs("Error on reading file\n", stdin);
             return ERROR_CODE;
-        }else{
+        }
+        else{
             if (smb == '\0' || smb == '\n'){
                 smb = '\n';
                 lines++;
@@ -42,10 +67,8 @@ void main(int argc, char** argv)
         return;
     }
     int countLines = strToPositiveInt(argv[2]);
-    if (countLines == ERROR_CODE){
-        fputs("Incorrect number of lines\n", stderr);
-        return;
-    }
+    if (countLines == ERROR_CODE)   return;
+    
     FILE* f = fopen(argv[1], "rt");
     if (!f){
         fputs("Error! Cannot open file\n", stderr);

@@ -2,13 +2,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/fcntl.h>
+#include "errno.h"
 #define ERROR_CODE -1
+#define EXIT_CODE 6
+
 
 void writeInFile(char* str)
 { 
     int f = open(str, O_WRONLY | O_CREAT, 0b110100100);
     if (f == ERROR_CODE){
         fputs("Error! Couldn't open file", stderr);
+        if (errno == EACCES)
+            fputs("\nNo roots", stderr);
         return;
     } 
 
@@ -16,7 +21,7 @@ void writeInFile(char* str)
     while (smb){
         fflush(stdin);
         smb = getc(stdin);
-        if (smb == '\n' || smb == '\6' || smb == EOF) smb = '\0'; else fputc(smb, f);
+        if (smb == '\n' || smb == EXIT_CODE || smb == EOF) smb = '\0'; else fputc(smb, f);
     }
     if (close(f) == ERROR_CODE)
         fputs("Error! Couldn't close file", stderr);
