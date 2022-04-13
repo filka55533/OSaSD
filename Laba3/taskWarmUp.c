@@ -28,8 +28,7 @@ int main()
     printf("Process PID %d, parent PID %d\nTime: %s.%09ld UTC\n\n", getpid(), getppid(), buf, tc.tv_nsec);
     if (procPID != 0){
         system("ps -x");
-        wait(NULL);
-        wait(NULL);
+        while (wait(NULL) != -1);
     }else{
         exit(0);
     }
