@@ -1,4 +1,5 @@
 #include "stdio.h"
+#include "sys/wait.h"
 #include "sys/types.h"
 #include "unistd.h"
 #include "stdlib.h"
@@ -25,7 +26,12 @@ int main()
     strftime(buf, BUF_SIZE, "%D %T", gmtime(&tc.tv_sec));
     
     printf("Process PID %d, parent PID %d\nTime: %s.%09ld UTC\n\n", getpid(), getppid(), buf, tc.tv_nsec);
-    if (procPID != 0)
+    if (procPID != 0){
         system("ps -x");
+        wait(NULL);
+        wait(NULL);
+    }else{
+        exit(0);
+    }
     return 0;
 }
