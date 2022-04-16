@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "errno.h"
 #define ERROR_CODE -1
 
 void main(int argc, char** argv)
@@ -31,6 +32,10 @@ void main(int argc, char** argv)
         fputs("Error! Can not open second file", stderr);
         return; 
     }
+    fchmod(f2, info.st_mode);
+    if (errno == EACCES)
+        fputs("Error! Can not push give roots", stderr);
+
     int smb;
     while ((smb = fgetc(ff1)) != EOF){
         if (smb != fputc(smb, ff2)){

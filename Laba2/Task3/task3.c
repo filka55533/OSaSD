@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/fcntl.h>
+#include <unistd.h>
 #include "errno.h"
 #define ERROR_CODE -1
 #define EXIT_CODE 6
@@ -17,13 +18,17 @@ void writeInFile(char* str)
         return;
     } 
 
+    FILE* ff = fdopen(f, "wb");
+
+
     char smb = 1;
     while (smb){
         fflush(stdin);
         smb = getc(stdin);
-        if (smb == '\n' || smb == EXIT_CODE || smb == EOF) smb = '\0'; else fputc(smb, f);
+        if (smb == '\n' || smb == EXIT_CODE || smb == EOF) smb = '\0';
+        fputc(smb, ff);
     }
-    if (close(f) == ERROR_CODE)
+    if (fclose(ff) == ERROR_CODE)
         fputs("Error! Couldn't close file", stderr);
 }
 

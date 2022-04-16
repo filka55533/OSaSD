@@ -111,7 +111,7 @@ int enumFiles(char* pathName, struct fileInfoNode** head, char* incorrPath)
 
 int main(int argc, char** argv)
 {
-    if (argc != 4){
+    if (argc < 4){
         fputs("Error! Incorrect count of arguments\n", stderr);
         return 1;
     }
@@ -127,6 +127,13 @@ int main(int argc, char** argv)
         return 1;
     }
 
+
+    DIR* dir = opendir(argv[3]);
+    if (!dir){ 
+        fprintf(stderr, "Error! Incorrect directory on the 3 argument\n");
+        return 1;
+    }else closedir(dir);
+    
     TFILE_INFO_NODE* head = NULL;
      if ((code = enumFiles(argv[1], &head, argv[3])) != ALL_OK){
         switch (code)

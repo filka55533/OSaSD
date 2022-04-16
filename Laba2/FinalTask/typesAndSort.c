@@ -2,10 +2,32 @@
 
 int strToInt(char* str)
 {
-    int res = 0;
-    for (int i = 0; i < strlen(str); i++)
-        if (str[i] >= '0' && str[i] <= '9') res = 10 * res + str[i] - '0';
-    
+    char* endPnt;
+    int res = strtol(str, &endPnt, 10);
+
+    if (errno)
+        if (res == LONG_MAX || errno == ERANGE){
+            fputs("Error! Overflow\n", stderr);
+            res = ERROR_CODE;
+        }else if (res == LONG_MIN || errno == ERANGE){
+            fputs("Error! Underflow\n", stderr);
+            res = ERROR_CODE; 
+        }
+        else {
+            fputs("Error! Incorrect value\n", stderr);
+            res = ERROR_CODE;
+        }
+    else{
+        
+        if (res < 0){
+            fputs("Error! Number is negative\n", stderr);
+            res = ERROR_CODE;
+        }else        
+        if (endPnt - str - strlen(str) || !strlen(str)){
+            fputs("Error! Incorrect value\n", stderr);
+            res = ERROR_CODE;
+        }
+    }
     return res;
 }
 

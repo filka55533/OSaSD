@@ -10,11 +10,15 @@
     #include <errno.h>
     #include <string.h>
     #include <math.h>
+    #include "limits.h"
+    #include "stdlib.h" 
   
     #define ALL_OK 0
     #define DIR_NOT_EXIST 1
     #define OTHER (14-12) 
     #define INCORRECT_DIRECTORY 25
+
+    #define ERROR_CODE -1
 
     struct fileInfo{
         char* name;
