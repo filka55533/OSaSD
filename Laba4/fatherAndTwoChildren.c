@@ -12,26 +12,34 @@
 int childNumber = 0;
 int messageNumber = 0;
 
-void printMessage(int isGet, int isItSig1)
+void printMessage(int isGet, int isItSig1, int senderPid)
 {   
+
     struct timespec tc;
     timespec_get(&tc, TIME_UTC);
     char buf[BUF_SIZE];
     strftime(buf, BUF_SIZE, "%D %T", gmtime(&tc.tv_sec));
     
-    pid_t pid = getpid(), ppid = getppid();
+    pid_t pid = getpid();
+    pid_t ppid = getppid();
 
     printf("%d %d %d %s.%09ld UTC ", ++messageNumber, pid, ppid, buf, tc.tv_nsec);
-    printf(isGet ? "get %s\n" : "put %s\n", isItSig1 ? "SIGUSR1" : "SIGUSR2");
+    printf(isGet ? "get %s" : "put %s", isItSig1 ? "SIGUSR1" : "SIGUSR2");
+    
+    if (senderPid != -1 && isGet)
+        printf(" from %d\n", senderPid);
+    else    
+        printf("\n");
+
     fflush(NULL);
 }
 
 void childrenHandler(int sg)
 {
-    printMessage(1, 1);
+    printMessage(1, 1, -1);
    
     kill(getppid(), SIGUSR2);
-    printMessage(0, 0);    
+    printMessage(0, 0, -1);    
 }
 
 
@@ -43,7 +51,8 @@ void terminateChild(int sg)
 
 void parentHandler(int sig, siginfo_t * info, void * ptr)
 {
-    printMessage(1, 0);
+    
+    printMessage(1, 0, info->si_pid);
 
     struct timespec tm;
     
@@ -52,7 +61,7 @@ void parentHandler(int sig, siginfo_t * info, void * ptr)
     
     nanosleep(&tm, NULL);
 
-    printMessage(0, 1);
+    printMessage(0, 1, 0);
     kill(0, SIGUSR1);
 }
 
@@ -62,6 +71,7 @@ void initParent()
     memset(&new, 0, sizeof(new));
     sigemptyset(&new.sa_mask);
     sigaddset(&new.sa_mask, SIGUSR1);
+    new.sa_flags = SA_SIGINFO;
     // sigaddset(&new.sa_mask, SIGUSR2);
     new.sa_sigaction = parentHandler;
 
@@ -105,7 +115,7 @@ int main(){
     }
 
     if (pid){
-        sleep(3);
+        sleep(1);
         kill(0, SIGUSR1);
     }
 
