@@ -12,17 +12,18 @@ struct buildTree
 
 struct buildTree processes [] = {  
 #define START 14
+                                    {0, 1},
                                     {1, 2},
                                     {2, 3},
                                     {2, 4},
                                     {2, 5},
-                                    {3, 7},
                                     {4, 6},
+                                    {3, 7},
                                     {5, 8},
-#define PROC_LEN (22 - START - 1)
+#define PROC_LEN (23 - START - 1)
                                 };
 
-int currentNode = 1;
+int currentNode = 0;
 int currentOffset = -1;
 
 void sigHandler(int sg)
