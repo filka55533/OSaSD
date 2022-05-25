@@ -150,7 +150,7 @@ void sigTermHandler(int sig)
     for (int i = 0; i <= PROC_LEN; i++){
         if (processes[i].father == procNumber){
             kill(pids[processes[i].son], SIGTERM);
-            waitpid(pids[processes[i].son], NULL, 0);
+            waitpid(pids[processes[i].son], NULL, 0) ;
         }
     }
     
@@ -221,19 +221,9 @@ void initGroups()
             break;
     }
 
-     
-    if (procNumber == 3 || procNumber == 4){
-        printf("I am proc %d\n", procNumber);
-        for (int i = 0; i <= PROC_LEN; i++)
-            printf("P%d : %d\n", i, pids[i]);
-        fflush(NULL);
-    }
-
     while (getpgid(pids[pid]) != pids[pid]) ;
-    while (setpgid(pids[procNumber], pids[pid]) == -1){
-        printf("%d aaaa\n", pids[procNumber]);
-        fflush(NULL);
-    }
+    setpgid(pids[procNumber], pids[pid]);
+    
 }
 
 void synchronizeProcesses()
