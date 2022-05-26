@@ -85,7 +85,7 @@ long long cryptFile(char* fullPath)
 
     struct stat info;
     fstat(fdop, &info);
-    int fdcp = open(cpyPath, O_WRONLY | O_APPEND | O_CREAT, info.st_mode);
+    int fdcp = open(cpyPath, O_WRONLY | O_CREAT, info.st_mode);
     if (fdcp == -1){
         perror(fullPath);
         close(fdop);
@@ -94,7 +94,7 @@ long long cryptFile(char* fullPath)
     }
 
     FILE* fop = fdopen(fdop, "rb");
-    FILE* fcp = fdopen(fdcp, "ab");    
+    FILE* fcp = fdopen(fdcp, "wb");    
     while (!feof(fop))
     {
         unsigned char buffer[BUFFER_SIZE];
@@ -139,7 +139,7 @@ long long decryptFile(char* fullPath)
         
     }
 
-
+    return 0;
 }
 
 
